@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Polls : รายละเอียดแบบสอบถาม
+{% endblock title %}
+
+
+{% block content %}
+{% if error %}
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-sm-12 col-md-8">
+        <br/>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> {{error}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+{% endif %}
+<div class="row">
+    <div class="col-md-2"></div>
+    
+    {% if question.closed == False %}        
+        <div class="col-sm-12 col-md-8">
+            <div class="d-flex">
+                <div class="flex-grow-1">
+                    <h1>
+                        <i class="fas fa-hand-paper" style="color: #dc3545;"></i> Vote    
+                    </h1>
+                </div>
+                <div>
+                    <h1>
+                        <a href="{% url 'polls:ResultView' question_id=question.id %}" class="btn btn-light" role="button" aria-pressed="true">
+                            <i class="far fa-grin-beam"></i> ดูผล Vote
+                        </a>
+                        <a href="{% url 'polls:IndexView' %}" class="btn btn-info" role="button"><i class="fas fa-home"></i>
+                            กลับไปที่หน้าหลัก</a>
+                    </h1>
+                </div>
+            </div>
+            <hr class="my-1" />
+            {% if voted %}
+            <h3 class="text-success d-inline">
+                (<i class="fas fa-user"></i> : {{request.user.first_name}}) คุณได้ทำการ vote แบบสอบถามแล้ว.
+            </h3>
+            {% endif %}
+            <form action="{% url 'polls:DetailView' question_id=question.id %}" method="POST">
+                {% csrf_token %}
+                <h4 class="mt-2">{{question.name}}</h4>
+                
+                {% for choice in choices %}
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="opt" id="opt_{{choice.id}}" value="{{choice.id}}" style="cursor: pointer;" 
+                    {% if forloop.first %}
+                        required
+                    {% endif %}
+                    
+                    {% if voted %}
+                        disabled
+                    {% endif %}
+
+                    
+                    {% if voted == choice.id %}
+                        checked
+                    {% endif %}
+                        
+                        
+                        >
+                    <label class="form-check-label" for="opt_{{choice.id}}" style="cursor: pointer;">
+                        <h5>{{choice.name}}</h5>
+                    </label>
+                </div> 
+                {% endfor %}
+                <button type="submit" class="btn btn-success" 
+                {% if voted %}
+                    disabled
+                {% endif %}
+                    >
+                    <i class="fas fa-check"></i> &nbsp; ให้คะแนน Vote
+                </button>  
+            </form>
+        </div>
+    {% else %}
+    <div class="col-sm-12 col-md-8"><br>
+        <div class="d-flex justify-content-center">
+            <h1><i class="fas fa-exclamation-triangle" style="color: #dc3545;"></i> แบบสอบถามปิดโหวตแล้ว!</h1>
+        </div>
+    </div>
+    {% endif %}
+    <div class="col-md-2"></div>
+</div>
+{% endblock content %}
+
+
+    
+
+    

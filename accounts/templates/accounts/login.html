@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Accounts : เข้าสู่ระบบ
+{% endblock title %}
+
+{% block content %}
+    {% if error %}
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-sm-12 col-md-6">
+            <br/>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle"></i> {{error}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-sm-12 col-md-6">
+            <h4 class="mt-1">เข้าสู่ระบบ : </h4>
+            <form action="{% url 'accounts:LoginView' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">ชื่อผู้ใช้ : </label>
+                    <input type="text" class="form-control" name="username" id="username" placeholder="ระบุชื่อผู้ใช้งาน" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">รหัสผ่าน : </label>
+                    <input type="password" class="form-control" name="password" id="password" placeholder="ระบุรหัสผ่าน" required />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i> ตกลง
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+{% endblock content %}

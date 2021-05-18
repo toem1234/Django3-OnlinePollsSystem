@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Polls : สร้างแบบสอบถาม 
+{% endblock title %}
+
+
+{% block content %}
+
+    {% if error %}
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-sm-12 col-md-8">
+            <br/>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle"></i> {{error}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    {% endif %}
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-sm-12 col-md-8">
+        <div class="d-flex">
+            <div class="flex-grow-1">
+                <h1><i class="far fa-plus-square" style="color: #28a745;"></i> สร้างแบบสอบถาม</h1>
+            </div>
+            <div>
+                <h1>
+                    <a href="{% url 'polls:IndexView' %}" class="btn btn-info" role="button"><i class="fas fa-home"></i> กลับไปที่หน้าหลัก</a>
+                </h1>
+            </div>
+        </div>
+        <hr class="my-1"/>
+        <form action="{% url 'polls:CreateView' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="question"><strong>หัวข้อแบบสอบถาม :</strong></label>
+                <input type="text" class="form-control form-control-sm" id="question" name="question" placeholder="ระบุหัวข้อแบบสอบถาม" required />
+                <strong>ระบุตัวเลือกได้สูงสุด 10 ตัวเลือก</strong>
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label for="choice1" class="col-md-2 col-form-label">Choice 1:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control form-control-sm" id="choice1" name="choice1" placeholder="ระบุตัวเลือกที่ 1" />
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label for="choice2" class="col-md-2 col-form-label">Choice 2:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control form-control-sm" id="choice2" name="choice2" placeholder="ระบุตัวเลือกที่ 2" />
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label for="choice3" class="col-md-2 col-form-label">Choice 3:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control form-control-sm" id="choice3" name="choice3" placeholder="ระบุตัวเลือกที่ 3" />
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label for="choice4" class="col-md-2 col-form-label">Choice 4:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control form-control-sm" id="choice4" name="choice4" placeholder="ระบุตัวเลือกที่ 4" />
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label for="choice5" class="col-md-2 col-form-label">Choice 5:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control form-control-sm" id="choice5" name="choice5" placeholder="ระบุตัวเลือกที่ 5" />
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label for="choice6" class="col-md-2 col-form-label">Choice 6:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control form-control-sm" id="choice6" name="choice6" placeholder="ระบุตัวเลือกที่ 6" />
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label for="choice7" class="col-md-2 col-form-label">Choice 7:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control form-control-sm" id="choice7" name="choice7" placeholder="ระบุตัวเลือกที่ 7" />
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label for="choice8" class="col-md-2 col-form-label">Choice 8:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control form-control-sm" id="choice8" name="choice8" placeholder="ระบุตัวเลือกที่ 8" />
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label for="choice9" class="col-md-2 col-form-label">Choice 9:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control form-control-sm" id="choice9" name="choice9" placeholder="ระบุตัวเลือกที่ 9" />
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 5px;">
+                    <label for="choice10" class="col-md-2 col-form-label">Choice 10:</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control form-control-sm" id="choice10" name="choice10" placeholder="ระบุตัวเลือกที่ 10" />
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> สร้างแบบสอบถาม</button>
+            <button type="reset" class="btn btn-danger"><i class="fas fa-times"></i> ยกเลิก</button>
+        </form>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
+    
+{% endblock content %}
+    
+    

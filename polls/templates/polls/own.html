@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    Polls : จัดการแบบสอบถาม
+{% endblock title %}
+
+
+{% block customcss %}
+    <style>
+        .popover{
+            max-width: 350px;
+        }
+    </style>
+{% endblock customcss %}
+    
+
+
+{% block content %}
+    
+{% if error or success %}
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-sm-12 col-md-8">
+        <br/>
+        <div class="alert 
+        {% if error %}
+            alert-danger 
+        {% else %}
+            alert-success
+        {% endif %}
+            alert-dismissible fade show" role="alert">
+            
+            {% if error %}
+            <i class="fas fa-exclamation-circle"></i> {{error}}
+            {% endif %}
+
+            {% if success %}
+                <i class="fas fa-check"></i> {{success}}
+            {% endif %}
+                
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>    
+{% endif %}
+
+        
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-sm-12 col-md-8">
+            <div class="d-flex">
+                <div class="flex-grow-1">
+                    <h1><i class="fas fa-poll" style="color: #28a745;"></i> แบบสอบถามของฉัน</h1>
+                </div>
+                <div>
+                    <h1><a href="#" id="tip"><i class="far fa-question-circle"></i></a></h1>
+                </div>
+            </div>
+            <hr class="mt-1 mb-2"/>
+            {% for q in questions %}
+                <h5 id="question_{{q.id}}">
+
+                    {% if q.closed %}
+                        <i class="fas fa-eye-slash" style="color: #6c757d;opacity: 0.2;"></i>
+                    {% else %}
+                        <a href="{% url 'polls:DetailView' question_id=q.id %}"><i class="fas fa-eye" style="color: #17a2b8"></i></a>
+                    {% endif %}
+                        
+                    <a href="{% url 'polls:EditView' question_id=q.id %}" class="text-decoration-none"><i class="fas fa-pencil-alt" style="color: #ffc107;"></i></a>
+
+                    
+                    {% if q.totalVote <= 0 %}
+                        <span class="confirm-delete">
+                            <i class="far fa-trash-alt" style="color: #dc3545;" data-id="{{q.id}}" data-title="{{q.name}}"></i>
+                        </span>
+                    {% else %}
+                        <i class="far fa-trash-alt" style="opacity: 0.2;"></i>
+                        <!-- <span class="confirm-delete">
+                            <i class="far fa-trash-alt" style="color: #dc3545;" data-id="{{q.id}}" data-title="{{q.name}}"></i>
+                        </span> -->
+                    {% endif %}
+                        
+
+
+                    <a href="{% url 'polls:ResultView' question_id=q.id %}">{{q.name}}</a> <small class="font-italic">สร้างโดย : <i class="fas fa-user"></i> {{q.created_by.first_name}} : {{q.created_at}}</small>
+                </h5>
+            {% endfor %}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <script>
+        const url_detail = "{% url 'polls:PollDetailAPIView' pk=99999 %}"
+        const url_own = "{% url 'polls:OwnView' %}"
+        const url_login = "{% url 'accounts:LoginView' %}"
+        
+    </script>
+
+{% endblock content %}
+
+
+{% block customjs %}
+    <script src="{% static 'utilities/polls/own.js' %}"></script>
+{% endblock customjs %}
+    
+
+
+
+    
+    
+    

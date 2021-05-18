@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    Polls : แก้ไขแบบสอบถาม
+{% endblock title %}
+
+
+{% block content %}
+
+    {% if error or success %}
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-sm-12 col-md-8">
+            <br/>
+            <div class="alert 
+            {% if error %}
+                alert-danger 
+            {% else %}
+                alert-success
+            {% endif %}
+                alert-dismissible fade show" role="alert">
+                
+                {% if error %}
+                <i class="fas fa-exclamation-circle"></i> {{error}}
+                {% endif %}
+
+                {% if success %}
+                    <i class="fas fa-check"></i> {{success}}
+                {% endif %}
+                    
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>    
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-sm-12 col-md-8">
+            <div class="d-flex">
+                <div class="flex-grow-1">
+                    <h1><i class="fas fa-edit" style="color:#ffc107 ;"></i> แก้ไขแบบสอบถาม</h1>
+                </div>
+                <div>
+                    <h1>
+                        <a href="{% url 'polls:OwnView' %}" class="btn btn-info" role="button"><i class="fas fa-arrow-left"></i> ย้อนกลับ</a>
+                    </h1>
+                </div>
+            </div>
+            <hr class="my-1"/>
+            <form action="{% url 'polls:EditView' question_id=question.id %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="question_title"><strong>หัวข้อแบบสอบถาม :</strong></label>
+                    <input type="text" class="form-control form-control-sm" id="question_title" name="question_title" value="{{question.name}}" placeholder="ระบุหัวข้อแบบสอบถาม" required />
+                    <strong>ตัวเลือก : </strong>
+                    
+                    {% for choice in choices %}
+                    <div class="form-group row" style="margin-bottom: 5px;">
+                        <label for="choice_name" class="col-md-2 col-form-label">Choice {{ forloop.counter }}:</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control form-control-sm" id="choice_{{choice.id}}" name="choice_{{choice.id}}" value="{{choice.name}}" placeholder="ระบุตัวเลือกที่ {{ forloop.counter }}" required />
+                        </div>
+                    </div>
+                    {% endfor %}
+                        
+                </div>
+                <button type="submit" class="btn btn-warning"><i class="fas fa-edit"></i> ยืนยันการแก้ไขแบบสอบถาม</button>
+                <a href="{% url 'polls:OwnView' %}" class="btn btn-danger" role="button" aria-pressed="true"><i class="fas fa-times"></i> ยกเลิก</a>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+{% endblock content %}
