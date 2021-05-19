@@ -17,35 +17,31 @@ Poll : ผลลัพธ์แบบสอบถาม
                 <i class="fas fa-pencil-alt"></i> แก้ไข
             </a>
 
-            {% if totalVote <= 0 %}
-                <span class="confirm-delete">
-                    <a href="#" class="btn btn-danger btn-sm" role="button" aria-pressed="true">
+                {% if totalVote <= 0 %}
+                    <span class="confirm-delete">
+                        <a href="#" class="btn btn-danger btn-sm" role="button" aria-pressed="true">
+                            <i class="far fa-trash-alt"></i> ลบ
+                        </a>
+                    </span>
+                {% else %}
+                    <button type="button" class="btn btn-danger btn-sm" disabled style="opacity: 0.2;">
                         <i class="far fa-trash-alt"></i> ลบ
-                    </a>
-                </span>
-            {% else %}
-                <button type="button" class="btn btn-danger btn-sm" disabled style="opacity: 0.2;">
-                    <i class="far fa-trash-alt"></i> ลบ
-                </button>
-            {% endif %}
+                    </button>
+                {% endif %}
                 
-
-            
-            {% if question.closed  %}
-                <span class="confirm-disable">
-                    <a href="#" class="btn btn-success btn-sm" role="button" aria-pressed="true">
-                        <i class="fas fa-lock-open"></i> <span class="confirm-disable-text">เปิดแบบสอบถาม</span>
-                    </a>
-                </span>
-            {% else %}
-                <span class="confirm-disable">
-                    <a href="#" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">
-                        <i class="fas fa-ban"></i> <span class="confirm-disable-text">ปิดแบบสอบถาม</span>
-                    </a>
-                </span>
-            {% endif %}
-                
-
+                {% if question.closed  %}
+                    <span class="confirm-disable">
+                        <a href="#" class="btn btn-success btn-sm" role="button" aria-pressed="true">
+                            <i class="fas fa-lock-open"></i> <span class="confirm-disable-text">เปิดแบบสอบถาม</span>
+                        </a>
+                    </span>
+                {% else %}
+                    <span class="confirm-disable">
+                        <a href="#" class="btn btn-secondary btn-sm" role="button" aria-pressed="true">
+                            <i class="fas fa-ban"></i> <span class="confirm-disable-text">ปิดแบบสอบถาม</span>
+                        </a>
+                    </span>
+                {% endif %}
 
         {% else %}
             <a href="{% url 'polls:IndexView' %}" class="btn btn-info btn-sm" role="button" aria-pressed="true">

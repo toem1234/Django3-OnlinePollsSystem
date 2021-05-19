@@ -1,3 +1,4 @@
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
@@ -9,6 +10,7 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from pprint import pp, pprint
 from django.db.models import F,Sum,Q,Value,IntegerField,CharField
+from django.urls import reverse
 
 # Create your views here.
 
@@ -35,9 +37,14 @@ def countVotedInChoice(question_id):
 
 
 def isOwner(request,question_id):
+    if not request.user:
+        return None
     try:
         owner = Question.objects.get(pk = question_id,created_by = request.user)
     except Question.DoesNotExist:
+        return None
+    except Exception as ex:
+        print(ex.__str__())
         return None
     return True
  
@@ -75,7 +82,7 @@ class CreateView(LoginRequiredMixin,View):
                     choice.save()
                 ownQuestion = Question.objects.filter(created_by = request.user).order_by('-created_at')
                 _questions = [ annotationTotalVoteQuestion(q)  for q in ownQuestion ]
-                return render(request,'polls/own.html',{'success': 'สร้างแบบสอบถามสำเร็จ','questions':_questions})
+                return HttpResponseRedirect(reverse('polls:OwnView') + '?createSuccess=True')
         except IntegrityError as ex:
             return render(request,'polls/create.html',{'error': ex.__str__()})
 
@@ -89,7 +96,7 @@ class DetailView(View):
             except Question.DoesNotExist:
                 return render(request,'404.html')
             except Exception as ex:
-                return render(request,'polls/detail.html',{'question': question, 'choices' : choices, 'error': ex.__str__() }) 
+                return HttpResponse('Error : {error}'.format(error = ex.__str__()))
             if voted:
                 return render(request,'polls/detail.html',{'question': question, 'choices' : choices, 'voted': voted[0].choice.id})
             else:
@@ -97,10 +104,11 @@ class DetailView(View):
 
     def post(self,request,question_id = None):
         if question_id:
+            question = Question.objects.get(pk = question_id)
+            choices = Choice.objects.filter(question = question).order_by('id')
             try:
                 with transaction.atomic():
-                    question = Question.objects.get(pk = question_id)
-                    choices = Choice.objects.filter(question = question).order_by('id')
+                    
                     _choices = [ model_to_dict(choice,"id") for choice in choices]
                     isFound = False
                     for c in _choices:
@@ -136,7 +144,6 @@ class EditView(LoginRequiredMixin,View):
                 return render(request,'404.html')
             try:
                 choices = Choice.objects.filter(question = question).order_by('id')
-                
                 return render(request,'polls/edit.html',{'question' : question,'choices': choices})
             except Exception as ex:
                 return HttpResponse('Error : {error}'.format(error = ex.__str__()))
@@ -144,11 +151,10 @@ class EditView(LoginRequiredMixin,View):
         if question_id:
             if not isOwner(request,question_id):
                 return render(request,'404.html')
+            initQuestion = Question.objects.get(pk = question_id)
+            initChoices = Choice.objects.filter(question = question_id)
             try:
                 with transaction.atomic():
-                    initQuestion = Question.objects.get(pk = question_id)
-                    initChoices = Choice.objects.filter(question = question_id)
-
                     if request.POST['question_title'].strip() in [None,'']:
                         return render(request,'polls/edit.html',{'question' : initQuestion,'choices': initChoices,'error': 'กรุณากรอกข้อมูลหัวข้อแบบสอบถามให้ครบถ้วน เมื่อต้องการปรับปรุงข้อมูล'})
 
