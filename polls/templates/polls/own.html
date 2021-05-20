@@ -59,15 +59,15 @@
                         <a href="{% url 'polls:DetailView' question_id=q.id %}"><i class="fas fa-eye" style="color: #17a2b8"></i></a>
                     {% endif %}
                         
-                    <a href="{% url 'polls:EditView' question_id=q.id %}" class="text-decoration-none"><i class="fas fa-pencil-alt" style="color: #ffc107;"></i></a>
+                    <a href="{% url 'polls:EditView' question_id=q.id %}" class="text-decoration-none"><i class="fas fa-pencil-alt" style="color: #ffc107;" id="update-{{forloop.counter}}"></i></a>
 
                     
                     {% if q.totalVote <= 0 %}
                         <span class="confirm-delete">
-                            <i class="far fa-trash-alt" style="color: #dc3545;" data-id="{{q.id}}" data-title="{{q.name}}"></i>
+                            <i class="far fa-trash-alt" style="color: #dc3545;" id="delete-{{forloop.counter}}" data-id="{{q.id}}" data-title="{{q.name}}"></i>
                         </span>
                     {% else %}
-                        <i class="far fa-trash-alt" style="opacity: 0.2;"></i>
+                        <i class="far fa-trash-alt" style="opacity: 0.2;" id="delete-{{forloop.counter}}"></i>
                         <!-- <span class="confirm-delete">
                             <i class="far fa-trash-alt" style="color: #dc3545;" data-id="{{q.id}}" data-title="{{q.name}}"></i>
                         </span> -->
