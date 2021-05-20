@@ -75,7 +75,7 @@
                         
 
 
-                    <a href="{% url 'polls:ResultView' question_id=q.id %}">{{q.name}}</a> <small class="font-italic">สร้างโดย : <i class="fas fa-user"></i> {{q.created_by.first_name}} : {{q.created_at}}</small>
+                    <a href="{% url 'polls:ResultView' question_id=q.id %}" id="question-{{forloop.counter}}">{{q.name}}</a> <small class="font-italic">สร้างโดย : <i class="fas fa-user"></i> {{q.created_by.first_name}} : {{q.created_at}}</small>
                 </h5>
             {% endfor %}
         </div>
