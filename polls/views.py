@@ -82,7 +82,7 @@ class CreateView(LoginRequiredMixin,View):
                     choice.save()
                 ownQuestion = Question.objects.filter(created_by = request.user).order_by('-created_at')
                 _questions = [ annotationTotalVoteQuestion(q)  for q in ownQuestion ]
-                return redirect(reverse('polls:OwnView') + '?createSuccess=True')
+                return redirect('polls:OwnView')
         except IntegrityError as ex:
             return render(request,'polls/create.html',{'error': ex.__str__()})
 
