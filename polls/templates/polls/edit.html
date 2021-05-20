@@ -63,7 +63,7 @@
                     <div class="form-group row" style="margin-bottom: 5px;">
                         <label for="choice_name" class="col-md-2 col-form-label">Choice {{ forloop.counter }}:</label>
                         <div class="col-md-10">
-                            <input type="text" class="form-control form-control-sm" id="choice_{{choice.id}}" name="choice_{{choice.id}}" value="{{choice.name}}" placeholder="ระบุตัวเลือกที่ {{ forloop.counter }}" required />
+                            <input type="text" class="form-control form-control-sm" id="choice_{{forloop.counter}}" name="choice_{{choice.id}}" value="{{choice.name}}" placeholder="ระบุตัวเลือกที่ {{ forloop.counter }}" required />
                         </div>
                     </div>
                     {% endfor %}
