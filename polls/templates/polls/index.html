@@ -25,7 +25,7 @@
             <div class="col-md-12">
                 {% for q in questions %}
                     <h5 id="question_{{q.id}}">
-                        <i class="fas fa-poll" style="color: #28a745;"></i> <a href="{% url 'polls:DetailView' question_id=q.id %}">{{q.name}}</a> 
+                        <i class="fas fa-poll" style="color: #28a745;"></i> <a href="{% url 'polls:DetailView' question_id=q.id %}" id="question-{{forloop.counter}}">{{q.name}}</a> 
                         <small class="font-italic">สร้างโดย :
                             <i class="fas fa-user"></i> {{q.created_by.first_name}} : {{q.created_at}}
                         </small>
