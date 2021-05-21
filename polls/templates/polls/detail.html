@@ -55,7 +55,7 @@ Polls : รายละเอียดแบบสอบถาม
                 
                 {% for choice in choices %}
                 <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="opt" id="opt_{{choice.id}}" value="{{choice.id}}" style="cursor: pointer;" 
+                    <input class="form-check-input" type="radio" name="opt" id="choice-{{forloop.counter}}" value="{{choice.id}}" style="cursor: pointer;" 
                     {% if forloop.first %}
                         required
                     {% endif %}
