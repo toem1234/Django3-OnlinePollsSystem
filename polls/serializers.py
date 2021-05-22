@@ -6,20 +6,21 @@ from django.db import transaction
 import traceback
 
 
+
 class ChoiceSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
     class Meta:
         model = Choice
         fields = ['id','name','count_vote']
 
 class QuestionSerializer(serializers.ModelSerializer):
-    choices = ChoiceSerializer(many=True)
     class Meta:
         model = Question
         fields = ['id','name','closed','choices','created_at','updated_at','created_by','updated_by']
         extra_kwargs = {
             'created_by': {'required': False}
         }
+    choices = ChoiceSerializer(many=True)
 
     def create(self,validated_data):
         try:
@@ -37,6 +38,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     def update(self,instance,validated_data):
         try:
+            pprint(validated_data)
             with transaction.atomic():
                 choices = validated_data.pop('choices')
                 instance.name = validated_data.get('name',instance.name)
@@ -47,6 +49,8 @@ class QuestionSerializer(serializers.ModelSerializer):
                 instance.updated_by = validated_data.get('updated_by',instance.updated_by)
                 instance.save()
                 for choice in choices:
+                    if not 'id' in choice:
+                        raise Exception('invalid data update.')
                     c = Choice.objects.get(pk=choice["id"],question=instance)
                     c.name = choice["name"]
                     c.save()

@@ -1,7 +1,7 @@
 from .models import Question,Choice,Vote
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework.response import Response
 from .serializers import QuestionSerializer,ChoiceSerializer,VoteSerializer,CloseVoteSerializer
 from rest_framework import permissions
@@ -19,11 +19,11 @@ class CustomPaginator(PageNumberPagination):
     page_size = 10
     def generate_respone(self,query_set,serializer_obj,request):
         try:
-            pprint(request.query_params)
+            # pprint(request.query_params)
             if "all" in request.query_params:
-                print("In")
+                # print("In")
                 all = request.query_params["all"] 
-                print(type(all))
+                # print(type(all))
                 if all == "true":
                     serializer = serializer_obj(query_set,many=True)
                     return Response(serializer.data)
@@ -53,7 +53,7 @@ class PollList(APIView):
         
     def post(self,request):
         serializer = QuestionSerializer(data=request.data)
-        pprint(serializer)
+        # pprint(serializer)
         if serializer.is_valid():
             serializer.save(created_by = request.user)
             return Response(serializer.data,status=status.HTTP_201_CREATED)
@@ -85,6 +85,7 @@ class PollDetail(APIView):
     def put(self,request,pk):
         question = self.get_object(pk)
         serializer = QuestionSerializer(question,data=request.data)
+        # pprint(serializer)
         if serializer.is_valid():
             serializer.save(updated_by = request.user,updated_at = timezone.now() )
             return Response(serializer.data)
