@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from pprint import pp, pprint
 from django.db.models import F,Sum,Q,Value,IntegerField,CharField
 from django.urls import reverse
+from django.middleware.csrf import CsrfViewMiddleware
 
 # Create your views here.
 
@@ -63,6 +64,9 @@ class CreateView(LoginRequiredMixin,View):
             with transaction.atomic():
                 if request.POST['question'].strip() in [None,'']:
                     return render(request,'polls/create.html',{'error': 'กรุณากรอกข้อมูลแบบสอบถาม'})
+                reason = CsrfViewMiddleware().process_view(request,None,(),{})
+                if reason is not None:
+                    return render(request,'polls/create.html',{'error': 'invalid request.'})
                 count = 0
                 choices = []
                 for i in range(1,11):
@@ -106,9 +110,13 @@ class DetailView(View):
         if question_id:
             question = Question.objects.get(pk = question_id)
             choices = Choice.objects.filter(question = question).order_by('id')
+
+            reason = CsrfViewMiddleware().process_view(request,None,(),{})
+            if reason is not None:
+                return render(request,"polls/detail.html",{'question': question, 'choices' : choices,'error': 'invalid request.' })
+                
             try:
                 with transaction.atomic():
-                    
                     _choices = [ model_to_dict(choice,"id") for choice in choices]
                     isFound = False
                     for c in _choices:
@@ -153,6 +161,11 @@ class EditView(LoginRequiredMixin,View):
                 return render(request,'404.html')
             initQuestion = Question.objects.get(pk = question_id)
             initChoices = Choice.objects.filter(question = question_id)
+
+            reason = CsrfViewMiddleware().process_view(request,None,(),{})
+            if reason is not None:
+                return render(request,'polls/edit.html',{'question' : initQuestion,'choices': initChoices,'error': 'invalid request.'})
+                
             try:
                 with transaction.atomic():
                     if request.POST['question_title'].strip() in [None,'']:

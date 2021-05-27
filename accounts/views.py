@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from django.db import IntegrityError,transaction
 import re
+from django.middleware.csrf import CsrfViewMiddleware
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -14,6 +16,9 @@ class SignupView(View):
         return render(request,'accounts/signup.html')
 
     def post(self,request):
+        reason = CsrfViewMiddleware().process_view(request,None,(),{})
+        if reason is not None:
+            return render(request,'accounts/signup.html',{'error': "invalid request"})
         try:
             with transaction.atomic():
                 if request.POST['username'].strip() not in [None,''] \
@@ -49,6 +54,9 @@ class LoginView(View):
         return render(request,'accounts/login.html')
 
     def post(self,request):
+        reason = CsrfViewMiddleware().process_view(request,None,(),{})
+        if reason is not None:
+            return render(request,'accounts/login.html',{'error': "invalid request." })
         try:
             if request.POST['username'].strip() not in [None,''] and request.POST['password'].strip() not in [None,''] :
                 username = request.POST['username']
@@ -68,6 +76,9 @@ class LoginView(View):
 
 class LogoutView(View):
     def post(self,request):
+        reason = CsrfViewMiddleware().process_view(request,None,(),{})
+        if reason is not None:
+            return HttpResponse('invalid request.')
         auth.logout(request)
         return render(request,'accounts/logout.html')
 
@@ -76,6 +87,9 @@ class InfoView(LoginRequiredMixin,View):
         return render(request,'accounts/info.html')
 
     def post(self,request):
+        reason = CsrfViewMiddleware().process_view(request,None,(),{})
+        if reason is not None:
+            return render(request,'accounts/info.html',{'error': 'invalid request.'})
         try:
             if request.POST['info-firstname'].strip() not in [None, ''] and request.POST['info-lastname'].strip() not in [None,'']:
                 first_name = request.POST['info-firstname']
